@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import connectDB from './config/db.js';
 
 import authRoutes from './routes/authRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
@@ -12,6 +13,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Database connection middleware (critical for serverless / Vercel environment)
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error('Database middleware connection error:', err.message);
+    res.status(500).json({ success: false, message: 'Database connection failed: ' + err.message });
+  }
+});
 
 // Routes
 app.use('/api/customer', authRoutes);
