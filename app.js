@@ -25,4 +25,13 @@ app.get('/', (req, res) => {
   res.json({ success: true, message: 'Amir Calligraphy API is running.' });
 });
 
+// Newsletter subscription endpoint
+app.post('/api/subscribe', (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    return res.status(400).json({ success: false, message: 'Email is required.' });
+  }
+  res.json({ success: true, message: 'Subscribed successfully!' });
+});
+
 export default app;
