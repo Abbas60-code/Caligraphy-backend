@@ -96,6 +96,7 @@ router.post('/forgot-password', async (req, res) => {
 
     res.json({ success: true, message: 'Verification code sent to your email.' });
   } catch (err) {
+    console.error('Forgot password error:', err);
     res.status(500).json({ success: false, message: err.message });
   }
 });
@@ -133,6 +134,7 @@ router.post('/reset-password', async (req, res) => {
 
     res.json({ success: true, message: 'Password reset successful. You can now login.' });
   } catch (err) {
+    console.error('Reset password error:', err);
     res.status(500).json({ success: false, message: err.message });
   }
 });
