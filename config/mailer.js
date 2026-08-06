@@ -147,3 +147,77 @@ export async function sendOrderNotification({ customer, email, phone, address, c
     html,
   });
 }
+
+/**
+ * Send password reset code to customer
+ */
+export async function sendResetCodeEmail(email, code) {
+  const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reset Your Password — Amir Calligraphy</title>
+</head>
+<body style="margin:0; padding:0; background:#F5EFE0; font-family: Inter, Arial, sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#F5EFE0; padding: 40px 16px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px; width:100%; background:#ffffff; border: 1px solid #E8DFC8; border-top: 5px solid #C9A84C; border-radius: 2px; overflow:hidden;">
+
+          <!-- Header -->
+          <tr>
+            <td style="background:#1A1A1A; padding: 32px 40px; text-align: center;">
+              <p style="font-family:Inter,sans-serif; font-size:10px; letter-spacing:5px; text-transform:uppercase; color:#C9A84C; margin:0 0 8px;">بسم الله</p>
+              <h1 style="font-family:Georgia,serif; font-size:28px; font-weight:700; color:#ffffff; margin:0;">Amir Calligraphy</h1>
+              <p style="font-family:Inter,sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,0.5); margin:8px 0 0;">Password Recovery</p>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding: 36px 40px; text-align: center;">
+              <h2 style="font-family:Georgia,serif; font-size:20px; color:#1A1A1A; margin:0 0 16px;">
+                Verification Code
+              </h2>
+              <p style="font-family:Inter,sans-serif; font-size:14px; color:#5A5050; line-height:1.6; margin:0 0 24px;">
+                You requested to reset your password. Please use the following 6-digit verification code to reset it. This code will expire in 15 minutes.
+              </p>
+              
+              <!-- Code Box -->
+              <div style="background:#F5EFE0; padding: 20px; border-radius: 4px; display: inline-block; letter-spacing: 4px; font-family: monospace; font-size: 32px; font-weight: bold; color: #1A1A1A; border: 1px dashed #C9A84C; margin-bottom: 24px;">
+                ${code}
+              </div>
+
+              <p style="font-family:Inter,sans-serif; font-size:13px; color:#8A7A6A; margin:0;">
+                If you did not request this, you can safely ignore this email. Your password will remain unchanged.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background:#F5EFE0; padding: 20px 40px; text-align:center; border-top: 1px solid #E8DFC8;">
+              <p style="font-family:Inter,sans-serif; font-size:11px; color:#8A7A6A; margin:0;">
+                This email was sent to <strong>${email}</strong> from Amir Calligraphy Store.
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `;
+
+  await transporter.sendMail({
+    from: `"Amir Calligraphy Store" <${process.env.Gmailuser}>`,
+    to: email,
+    subject: `🔑 Password Reset Verification Code: ${code}`,
+    html,
+  });
+}
+
