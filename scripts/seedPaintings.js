@@ -267,7 +267,7 @@ const multiArtPaintings = [
   },
 ];
 
-async function seedPaintings() {
+async function managePaintings() {
   try {
     if (!process.env.Database) {
       console.log('⚠️ No Database connection string in .env');
@@ -276,26 +276,25 @@ async function seedPaintings() {
     await mongoose.connect(process.env.Database);
     console.log('Database connected');
 
+    if (process.argv.includes('--clear')) {
+      await Painting.deleteMany({});
+      console.log('✅ All paintings permanently cleared from database.');
+      process.exit(0);
+    }
+
     const count = await Painting.countDocuments();
     console.log(`Current paintings in DB: ${count}`);
 
-    if (count === 0) {
-      console.log('Database has no paintings. Seeding multi-art paintings...');
+    if (process.argv.includes('--force')) {
+      await Painting.deleteMany({});
       await Painting.insertMany(multiArtPaintings);
-      console.log(`✅ Successfully seeded ${multiArtPaintings.length} multi-art paintings into database!`);
-    } else {
-      console.log('Database already contains paintings. To re-seed, run with --force');
-      if (process.argv.includes('--force')) {
-        await Painting.deleteMany({});
-        await Painting.insertMany(multiArtPaintings);
-        console.log(`✅ Re-seeded ${multiArtPaintings.length} multi-art paintings into database!`);
-      }
+      console.log(`✅ Seeded ${multiArtPaintings.length} paintings into database.`);
     }
     process.exit(0);
   } catch (err) {
-    console.error('❌ Error seeding paintings:', err.message);
+    console.error('❌ Error:', err.message);
     process.exit(1);
   }
 }
 
-seedPaintings();
+managePaintings();
