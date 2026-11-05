@@ -14,6 +14,7 @@ const paintingSchema = new mongoose.Schema(
     image: { type: String, default: '' },
     imagePublicId: { type: String, default: '' }, // Cloudinary public_id for deletion
     category: { type: String, default: 'General' },
+    artMovement: { type: String, default: '' },
     dimensions: { type: String, default: '' },
     materials: { type: String, default: '' },
     availability: {
