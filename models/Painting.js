@@ -13,6 +13,8 @@ const paintingSchema = new mongoose.Schema(
     originalPrice: { type: Number, default: null },
     image: { type: String, default: '' },
     imagePublicId: { type: String, default: '' }, // Cloudinary public_id for deletion
+    images: { type: [String], default: [] }, // Multiple artwork images
+    imagesPublicIds: { type: [String], default: [] },
     category: { type: String, default: 'General' },
     artMovement: { type: String, default: '' },
     dimensions: { type: String, default: '' },
